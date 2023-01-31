@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-darkshorefe-dev-100616-authRole",
+      "UnauthRoleArn": "arn:aws:iam::962586598999:role/amplify-darkshorefe-dev-100616-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::962586598999:role/amplify-darkshorefe-dev-100616-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-darkshorefe-dev-100616-deployment",
+      "UnauthRoleName": "amplify-darkshorefe-dev-100616-unauthRole",
+      "StackName": "amplify-darkshorefe-dev-100616",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:962586598999:stack/amplify-darkshorefe-dev-100616/df18bc90-a1bb-11ed-a530-066bedbae7d0",
+      "AmplifyAppId": "d1x8t2yzyljuoe"
+    },
+    "categories": {
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
+  }
+}
