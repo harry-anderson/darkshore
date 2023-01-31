@@ -5,6 +5,12 @@ use std::env;
 /// Main function
 #[tokio::main]
 async fn main() -> Result<(), Error> {
+    tracing_subscriber::fmt()
+        .with_ansi(false)
+        .without_time()
+        .with_max_level(tracing_subscriber::filter::LevelFilter::INFO)
+        .init();
+
     // Initialize the AWS SDK for Rust
     let config = aws_config::load_from_env().await;
     let table_name = env::var("TABLE_NAME").expect("TABLE_NAME must be set");
@@ -15,21 +21,20 @@ async fn main() -> Result<(), Error> {
     // We use a closure to pass the `dynamodb_client` and `table_name` as arguments
     // to the handler function.
     lambda_http::run(service_fn(|request: Request| {
-        put_item(&dynamodb_client, &table_name, request)
+        handler(&dynamodb_client, &table_name, request)
     }))
     .await?;
 
     Ok(())
 }
 
-/// Put Item Lambda function
-///
 /// This function will run for every invoke of the Lambda function.
-async fn put_item(
+async fn handler(
     client: &Client,
     table_name: &str,
     request: Request,
 ) -> Result<Response<Body>, Error> {
+    tracing::info!("request: {:?}", request);
     // Extract path parameter from request
     let path_parameters = request.path_parameters();
     let id = match path_parameters.first("id") {
@@ -136,7 +141,7 @@ mod tests {
             .with_path_parameters(path_parameters);
 
         // Send mock request to Lambda handler function
-        let response = put_item(&client, table_name, request)
+        let response = handler(&client, table_name, request)
             .await
             .unwrap();
         

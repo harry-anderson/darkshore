@@ -1340,7 +1340,10 @@ dependencies = [
  "aws-types",
  "http",
  "lambda_http",
+ "serde_json",
  "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

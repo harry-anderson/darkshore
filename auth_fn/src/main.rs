@@ -2,7 +2,7 @@ use aws_lambda_events::apigw::{
     ApiGatewayV2CustomAuthorizerSimpleResponse, ApiGatewayV2CustomAuthorizerV2Request,
 };
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-use serde_json::json;
+use serde_json::Value;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -12,10 +12,10 @@ async fn main() -> Result<(), Error> {
         .with_max_level(tracing_subscriber::filter::LevelFilter::INFO)
         .init();
 
-    run(service_fn(function_handler)).await
+    run(service_fn(handler)).await
 }
 
-pub async fn function_handler(
+pub async fn handler(
     event: LambdaEvent<ApiGatewayV2CustomAuthorizerV2Request>,
 ) -> Result<ApiGatewayV2CustomAuthorizerSimpleResponse, Error> {
 
@@ -25,12 +25,12 @@ pub async fn function_handler(
 
         return Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
             is_authorized: allow,
-            context: json!({"testKey": "harry_is_cool"}),
+            context: Value::Null,
         });
     }
 
     Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
         is_authorized: false,
-        context: json!({"testKey": "harry_is_cool"}),
+        context: Value::Null,
     })
 }
