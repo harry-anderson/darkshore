@@ -18,7 +18,6 @@ async fn main() -> Result<(), Error> {
 pub async fn handler(
     event: LambdaEvent<ApiGatewayV2CustomAuthorizerV2Request>,
 ) -> Result<ApiGatewayV2CustomAuthorizerSimpleResponse, Error> {
-
     if let Some(token) = event.payload.headers.get("authorization") {
         // do something
         let allow = token.as_bytes() == b"harry_is_cool";
@@ -28,10 +27,9 @@ pub async fn handler(
             context: json!({}),
         })
     } else {
-
-    Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
-        is_authorized: false,
-        context: json!({}),
-    })
+        Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
+            is_authorized: false,
+            context: json!({}),
+        })
     }
 }
