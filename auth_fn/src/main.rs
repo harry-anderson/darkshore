@@ -2,7 +2,7 @@ use aws_lambda_events::apigw::{
     ApiGatewayV2CustomAuthorizerSimpleResponse, ApiGatewayV2CustomAuthorizerV2Request,
 };
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-use serde_json::Value;
+use serde_json::json;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -23,14 +23,15 @@ pub async fn handler(
         // do something
         let allow = token.as_bytes() == b"harry_is_cool";
 
-        return Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
+        Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
             is_authorized: allow,
-            context: Value::Null,
-        });
-    }
+            context: json!({}),
+        })
+    } else {
 
     Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
         is_authorized: false,
-        context: Value::Null,
+        context: json!({}),
     })
+    }
 }
