@@ -10,7 +10,7 @@ mod util;
 mod router;
 mod pages;
 
-const SID: &str = "darkshore.sid";
+const SID_COOKIE_KEY: &str = "darkshore.sid";
 
 fn document() -> HtmlDocument {
     use wasm_bindgen::JsCast;
@@ -26,7 +26,6 @@ fn cookie_string() -> String {
     document().cookie().unwrap()
 }
 
-
 #[wasm_bindgen(start)]
 pub async fn main_js() -> Result<(), JsValue> {
     console_error_panic_hook::set_once();
@@ -40,8 +39,8 @@ pub async fn main_js() -> Result<(), JsValue> {
 
     let app = Spa::new("Pauan", user);
 
-    let session_id = cookies::get(&cookie_string(), SID);
-    tracing::debug!("sid: {:?}", session_id);
+    let session_id = cookies::get(&cookie_string(), SID_COOKIE_KEY);
+    tracing::debug!("session_id: {:?}", session_id);
 
     dominator::append_dom(&dominator::body(), Spa::render(app));
 

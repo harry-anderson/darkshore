@@ -24,7 +24,7 @@ pub async fn handler(
 
         Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
             is_authorized: allow,
-            context: json!({}),
+            context: json!({"token": "harry_is_cool"}),
         })
     } else {
         Ok(ApiGatewayV2CustomAuthorizerSimpleResponse {
