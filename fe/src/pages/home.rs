@@ -5,14 +5,13 @@ use once_cell::sync::Lazy;
 
 use crate::spa::Spa;
 
-
 pub struct HomePage {}
 
 impl HomePage {
     pub fn new() -> Arc<Self> {
         Arc::new(Self {})
     }
-    pub fn render_header(spa_state: Arc<Spa>) -> Dom {
+    pub fn render_header(_spa_state: Arc<Spa>) -> Dom {
         static HEADER_CLASS: Lazy<String> = Lazy::new(|| {
             class! {
                 .style("display", "grid")
@@ -29,7 +28,7 @@ impl HomePage {
         ])})
     }
 
-    pub fn render_footer(spa_state: Arc<Spa>) -> Dom {
+    pub fn render_footer(_spa_state: Arc<Spa>) -> Dom {
         static FOOTER_CLASS: Lazy<String> = Lazy::new(|| {
             class! {
                 .style("display", "grid")
@@ -42,7 +41,7 @@ impl HomePage {
         ])})
     }
 
-    pub fn render_main(spa_state: Arc<Spa>) -> Dom {
+    pub fn render_main(_spa_state: Arc<Spa>) -> Dom {
         static ROOT_CLASS: Lazy<String> = Lazy::new(|| {
             class! {
                 .style("display", "grid")
@@ -53,7 +52,7 @@ impl HomePage {
             .class([&*ROOT_CLASS])
             .children(&mut [
 
-            ] )
+            ])
         })
     }
 
