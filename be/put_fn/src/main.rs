@@ -61,8 +61,9 @@ async fn handler(
     let res = client
         .put_item()
         .table_name(table_name)
-        .item("id", AttributeValue::S(id.to_string()))
-        .item("payload", AttributeValue::S(req.body.unwrap_or_default()))
+        .item("PK", AttributeValue::S(id.to_string()))
+        .item("SK", AttributeValue::S(id.to_string()))
+        .item("data", AttributeValue::S(req.body.unwrap_or_default()))
         .send()
         .await;
 

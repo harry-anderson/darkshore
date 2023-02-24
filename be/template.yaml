@@ -49,23 +49,16 @@ Resources:
                 Action: lambda:InvokeFunction
                 Resource: !GetAtt AuthFn.Arn
 
-  Table:
-    Type: AWS::Serverless::SimpleTable # More info about SimpleTable Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-simpletable.html
-    Properties:
-      PrimaryKey:
-        Name: id
-        Type: String
-
   AuthFn:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: target/lambda/auth_fn/
       Environment:
         Variables:
-          TABLE_NAME: !Ref Table
+          TABLE_NAME: !Ref SessionTable
       Policies:
         - DynamoDBWritePolicy: # More info about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
-            TableName: !Ref Table
+            TableName: !Ref SessionTable
 
   PutFn:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -83,10 +76,75 @@ Resources:
             PayloadFormatVersion: "2.0"
       Environment:
         Variables:
-          TABLE_NAME: !Ref Table
+          TABLE_NAME: !Ref MainTable
       Policies:
         - DynamoDBWritePolicy: # More info about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
-            TableName: !Ref Table
+            TableName: !Ref MainTable
+
+
+  SessionTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      ProvisionedThroughput:
+        ReadCapacityUnits: 3
+        WriteCapacityUnits: 3
+      AttributeDefinitions:
+        -
+          AttributeName: "PK"
+          AttributeType: "S"
+        -
+          AttributeName: "SK"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "PK"
+          KeyType: "HASH"
+        - 
+          AttributeName: "SK"
+          KeyType: "RANGE"
+      TimeToLiveSpecification:
+        AttributeName: "ttl"
+        Enabled: true
+
+  MainTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      ProvisionedThroughput:
+        ReadCapacityUnits: 3
+        WriteCapacityUnits: 3
+      AttributeDefinitions:
+        -
+          AttributeName: "PK"
+          AttributeType: "S"
+        -
+          AttributeName: "SK"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "PK"
+          KeyType: "HASH"
+        - 
+          AttributeName: "SK"
+          KeyType: "RANGE"
+      GlobalSecondaryIndexes:
+        -
+          IndexName: "GSI1"
+          KeySchema:
+            -
+              AttributeName: "SK"
+              KeyType: "HASH"
+            -
+              AttributeName: "PK"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 3
+            WriteCapacityUnits: 3
+      TimeToLiveSpecification:
+        AttributeName: "ttl"
+        Enabled: true
+
 
 Outputs:
   Api:
@@ -98,6 +156,9 @@ Outputs:
   PutFn:
     Description: "Put Lambda Function ARN"
     Value: !GetAtt PutFn.Arn
-  PutTable:
+  SessionTable:
     Description: "DynamoDB table name"
-    Value: !GetAtt Table.Arn
+    Value: !GetAtt SessionTable.Arn
+  MainTable:
+    Description: "DynamoDB table name"
+    Value: !GetAtt MainTable.Arn
