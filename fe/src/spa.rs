@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use crate::{
     model::User,
-    pages::{error::ErrorPage, home::HomePage, login::LoginPage, verify::VerifyPage},
+    pages::{error::ErrorPage, home::HomePage, login::LoginPage},
     router::Route,
     util::AsyncLoader,
 };
@@ -46,7 +46,6 @@ impl Spa {
                 match route {
                     Route::Home => HomePage::render(spa.clone()),
                     Route::Login => LoginPage::render(spa.clone()),
-                    Route::Verify => VerifyPage::render(spa.clone()),
                     Route::View(_) => todo!(),
                     Route::Error => ErrorPage::render(spa.clone()),
                 }

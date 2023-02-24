@@ -10,21 +10,18 @@ pub enum Route {
     Home,
     View(Uuid),
     Login,
-    Verify,
     Error,
 }
 
 const HOME_ROUTE: &str = "#/";
 const LOGIN_ROUTE: &str = "#/login";
 const ERROR_ROUTE: &str = "#/error";
-const VERIFY_ROUTE: &str = "#/verify";
 const VIEW_BOARD_ROUTE: &str = "#/view/b#";
 
 fn parse_tag<'a>(i: &'a str) -> nom::IResult<&'a str, &'a str> {
     //Matched first to last
     alt((
         tag(VIEW_BOARD_ROUTE),
-        tag(VERIFY_ROUTE),
         tag(LOGIN_ROUTE),
         tag(ERROR_ROUTE),
         tag(HOME_ROUTE),
@@ -42,7 +39,6 @@ impl Route {
                 // Add raw string to enum mapping for routes
                 HOME_ROUTE => Route::Home,
                 LOGIN_ROUTE => Route::Login,
-                VERIFY_ROUTE => Route::Verify,
                 VIEW_BOARD_ROUTE => match Uuid::parse_str(ptr) {
                     Ok(n) => Route::View(n),
                     Err(err) => Route::Error,
