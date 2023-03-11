@@ -1,5 +1,6 @@
 # darkshore
 full stack rust web app starter
 
-Front-end: WASM SPA (dominator)
-Backend: AWS SAM with rust ARM lambda functions
+front-end: WASM SPA (dominator)
+
+backend: AWS SAM with rust ARM lambda functions
